@@ -27,36 +27,72 @@ One aspect of randomization many are familiar with is the lack of it. Spotify fo
 
 ## Applications
 
-### 1. Cryptography and Security
-
-**Sample Code**: `key_generation.ino`
-
-Random noise is paramount for generating secure cryptographic keys, [initialization vectors (IVs)](https://en.wikipedia.org/wiki/Initialization_vector), and [nonces](https://en.wikipedia.org/wiki/Cryptographic_nonce). [Pseudo-random number generators (PRNGs)](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) can be [vulnerable if](https://www.schneier.com/wp-content/uploads/2017/10/paper-prngs.pdf) their seed is predictable, compromising the entire encryption process. This example demonstrates the use of random noise generated from an analog pin to seed a cryptographically secure random number generator on an Arduino, ensuring robust encryption keys.
-
-### 2. Random Number Generation
+### 1. Random Number Generation
 
 **Sample Code**: `random_number_generation.ino`
 
-Random number generation is integral to [simulations](https://en.wikipedia.org/wiki/Simulation_noise), [probabilistic algorithms](https://dev.to/lilyneema/beginners-guide-statistics-and-probability-in-machine-learning-2c2j), and [statistical sampling methods](https://www.sciencedirect.com/topics/mathematics/random-noise). The sample illustrates the use of truly random noise as a seed for a linear congruential generator (LCG) to produce high-entropy random numbers, enhancing the unpredictability and quality of the results.
+Random number generation is integral to [simulations](https://en.wikipedia.org/wiki/Simulation_noise), [probabilistic algorithms](https://dev.to/lilyneema/beginners-guide-statistics-and-probability-in-machine-learning-2c2j), and [statistical sampling methods](https://www.sciencedirect.com/topics/mathematics/random-noise). This sketch shows the basic usage of the Arduino `random()` function and how we create a simple tool with it.
 
-### 3. Noise Generation for Signal Processing
+See it in action here: [Random Number Generation](https://wokwi.com/projects/406743956591814657)
 
-**Sample Code**: `white_noise_audio.ino`
+### 2. Cryptography and Security
 
-[Signal processing](https://www.analog.com/en/lp/001/beginners-guide-to-dsp.html) applications, such as audio testing and synthesis, require truly random noise to generate white noise signals. This code sample demonstrates how to produce white noise on an Arduino, which can be used for testing audio equipment or creating sound effects.
+**Insecure Key Code**: `key_generation.ino`
+**Insecure Key Wowki**: https://wokwi.com/projects/406745991681997825
 
-### 4. Randomized Testing and Fuzzing
+**Improved Key Generator**: `better_key_generation.ino`
+**Improve Key Generator Wowki**: https://wokwi.com/projects/406746112046999553
 
-**Sample Code**: `fuzz_testing.ino`
+Random noise is paramount for generating secure cryptographic keys, [initialization vectors (IVs)](https://en.wikipedia.org/wiki/Initialization_vector), and [nonces](https://en.wikipedia.org/wiki/Cryptographic_nonce). [Pseudo-random number generators (PRNGs)](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) can be [vulnerable if](https://www.schneier.com/wp-content/uploads/2017/10/paper-prngs.pdf) their seed is predictable, compromising the entire encryption process. This example demonstrates the use of random noise generated from an analog pin to seed a cryptographically secure random number generator on an Arduino, ensuring robust encryption keys.
 
-[Fuzz testing](https://owasp.org/www-community/Fuzzing) involves feeding random inputs into a system to uncover potential vulnerabilities. This example shows how to generate truly random noise inputs to stress test a system, helping to identify edge cases and bugs that might not be detected with deterministic inputs.
+The first sketch `key_generation.ino` uses the basic abstracted Arduino functions to build a cryptographic key, but I feel those are not suitable for a truly secure implementation, so we implement in the second, this function:
+
+```
+void seedFromPins(int analogPin1, int analogPin2) {
+  // 1. Use two pins
+  pinMode(analogPin1, INPUT);
+  pinMode(analogPin2, INPUT);
+
+  // 2. Take a reading (we can use floats here if memory permits)
+  int reading1 = analogRead(analogPin1);
+  int reading2 = analogRead(analogPin2);
+
+  // 3. Mask (XOR) the readings against timing 
+  long seed = ((long)reading1 << 16) | reading2;
+  seed ^= micros();
+  
+  // 4. Return the value so we can use it elsewhere
+  return seed;
+
+}
+```
+
+What this second function does it is reads the voltages from two pins (Analog 1 and Analog 2) and uses those to seed the [random() function](https://www.arduino.cc/reference/en/language/functions/random-numbers/random/). This is a MAJOR improvement over the basic function because it uses voltage artifacts as a seed. These are different every time the board powers up, therefore they should produce consistent random noise.
 
 
-### 5. Randomized Algorithms
+### 2. Randomized Algorithms
 
 **Sample Code**: `optimization_randomization.ino`
 
 Randomized algorithms, such as those used in optimization or sorting, often rely on true randomness to explore solution spaces effectively. This sample demonstrates how to implement a simple randomized algorithm on an Arduino, using truly random noise to ensure diverse and unbiased results.
+
+### Profiling and Optimizing Performance
+
+Since our precious microcontrollers are memory constrained, it's important to strip away as much abstraction as we possibly can. In most projects, you do not use all of the pins. I'd venture to say that most projects use a handful of pins at most, leaving a bundle for sampling. 
+
+With that in mind, let's look at how our direct pin seeding can be lighterweight than simply "choosing" a random number.
+
+### Terms used:
+
+Analog-to-Digital Converter (ADC) - A device that converts a continuous physical quantity (like voltage) to a digital number that represents the quantity's amplitude.
+Prescaler - A circuit that reduces a high-frequency signal to a lower frequency by integer division. In ADC context, it's used to set the ADC clock frequency relative to the CPU clock.
+Linear Congruential Generator (LCG): A simple algorithm for generating pseudorandom numbers. It works by the formula: X(n+1) = (a * X(n) + c) mod m Where X is the sequence of values, and a, c, and m are constants.
+Entropy - In the context of cryptography, a measure of the randomness or unpredictability of data. High entropy is crucial for generating secure keys.
+Baud Rate - The rate at which information is transferred in a communication channel. In the UART context, it refers to the number of signal or symbol changes that occur per second.
+Nibble - 4 bits, or half of a byte.
+eXclusive OR (XOR): A logical operation that outputs true only when inputs differ (one is true, the other is false).
+
+
 
 ## Getting Started
 
