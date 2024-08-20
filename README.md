@@ -72,7 +72,11 @@ What this second function does it is reads the voltages from two pins (Analog 1 
 
 ### 2. Randomized Algorithms
 
-**Sample Code**: `optimization_randomization.ino`
+**High Level Quicksort**: `abstracted_quick_sort.ino`
+**Wowki Abstracted Quicksort**: https://wokwi.com/projects/406747937567750145
+**Low Level Quicksort**: `unabstracted_quick_sort.ino`
+**Wowki Unabstracted Quicksort**: https://wokwi.com/projects/406748051779724289
+
 
 Randomized algorithms, such as those used in optimization or sorting, often rely on true randomness to explore solution spaces effectively. This sample demonstrates how to implement a simple randomized algorithm on an Arduino, using truly random noise to ensure diverse and unbiased results.
 
@@ -80,7 +84,48 @@ Randomized algorithms, such as those used in optimization or sorting, often rely
 
 Since our precious microcontrollers are memory constrained, it's important to strip away as much abstraction as we possibly can. In most projects, you do not use all of the pins. I'd venture to say that most projects use a handful of pins at most, leaving a bundle for sampling. 
 
-With that in mind, let's look at how our direct pin seeding can be lighterweight than simply "choosing" a random number.
+With that in mind, let's look at how our direct pin seeding can be lighterweight than simply "choosing" a random number, I compare the "unabstracted" version using direct register and pin manipulations to the abstracted (Arduino library infused) version..
+
+    Memory Usage:
+
+    Unabstracted: Uses less program memory (flash) as it doesn't rely on Arduino library functions.
+    Abstracted: Slightly larger program size due to inclusion of Arduino library functions.
+
+
+    CPU Cycles:
+
+    Unabstracted: Generally faster as it directly manipulates hardware registers.
+    Abstracted: Slightly slower due to function call overhead and additional checks in Arduino libraries.
+
+
+    Timing Precision:
+
+    Unabstracted: More precise timing control, which can be crucial for randomness.
+    Abstracted: Less precise timing due to abstractions in the Arduino core.
+
+
+    Power Consumption:
+
+    Unabstracted: Potentially lower power consumption due to more efficient code execution.
+    Abstracted: Slightly higher power consumption due to additional processing.
+
+
+    Code Readability and Maintainability:
+
+    Unabstracted: More complex and harder to read for beginners, but more controllable.
+    Abstracted: Easier to read and maintain, especially for those familiar with Arduino.
+
+    Quantitative Estimate:
+    While exact numbers would require benchmarking on specific hardware, we can make some general estimates:
+
+    Memory Savings: The unabstracted version might save about 500-1000 bytes of program memory.
+    Speed Improvement: The unabstracted version could be about 10-20% faster for ADC readings and UART transmissions.
+    Timing Precision: The unabstracted version could offer nanosecond-level control vs microsecond-level in the abstracted version.
+
+    Real-world Impact:
+    For most hobbyist projects, the difference would be negligible. However, sometimes we just want to squeeze out the maximum performance benefit.
+
+I will update this with hardware profiling tests, but for now, thinking about it, this is what I hypothesize will happen.
 
 ### Terms used:
 
