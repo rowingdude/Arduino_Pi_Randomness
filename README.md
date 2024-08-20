@@ -38,9 +38,11 @@ See it in action here: [Random Number Generation](https://wokwi.com/projects/406
 ### 2. Cryptography and Security
 
 **Insecure Key Code**: `key_generation.ino`
+
 **Insecure Key Wowki**: https://wokwi.com/projects/406745991681997825
 
 **Improved Key Generator**: `better_key_generation.ino`
+
 **Improve Key Generator Wowki**: https://wokwi.com/projects/406746112046999553
 
 Random noise is paramount for generating secure cryptographic keys, [initialization vectors (IVs)](https://en.wikipedia.org/wiki/Initialization_vector), and [nonces](https://en.wikipedia.org/wiki/Cryptographic_nonce). [Pseudo-random number generators (PRNGs)](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) can be [vulnerable if](https://www.schneier.com/wp-content/uploads/2017/10/paper-prngs.pdf) their seed is predictable, compromising the entire encryption process. This example demonstrates the use of random noise generated from an analog pin to seed a cryptographically secure random number generator on an Arduino, ensuring robust encryption keys.
@@ -73,8 +75,11 @@ What this second function does it is reads the voltages from two pins (Analog 1 
 ### 2. Randomized Algorithms
 
 **High Level Quicksort**: `abstracted_quick_sort.ino`
+
 **Wowki Abstracted Quicksort**: https://wokwi.com/projects/406747937567750145
+
 **Low Level Quicksort**: `unabstracted_quick_sort.ino`
+
 **Wowki Unabstracted Quicksort**: https://wokwi.com/projects/406748051779724289
 
 
@@ -129,13 +134,13 @@ I will update this with hardware profiling tests, but for now, thinking about it
 
 ### Terms used:
 
-Analog-to-Digital Converter (ADC) - A device that converts a continuous physical quantity (like voltage) to a digital number that represents the quantity's amplitude.
-Prescaler - A circuit that reduces a high-frequency signal to a lower frequency by integer division. In ADC context, it's used to set the ADC clock frequency relative to the CPU clock.
-Linear Congruential Generator (LCG): A simple algorithm for generating pseudorandom numbers. It works by the formula: X(n+1) = (a * X(n) + c) mod m Where X is the sequence of values, and a, c, and m are constants.
-Entropy - In the context of cryptography, a measure of the randomness or unpredictability of data. High entropy is crucial for generating secure keys.
-Baud Rate - The rate at which information is transferred in a communication channel. In the UART context, it refers to the number of signal or symbol changes that occur per second.
-Nibble - 4 bits, or half of a byte.
-eXclusive OR (XOR): A logical operation that outputs true only when inputs differ (one is true, the other is false).
+*Analog-to-Digital Converter (ADC) - A device that converts a continuous physical quantity (like voltage) to a digital number that represents the quantity's amplitude.
+*Prescaler - A circuit that reduces a high-frequency signal to a lower frequency by integer division. In ADC context, it's used to set the ADC clock frequency relative to the CPU clock.
+*Linear Congruential Generator (LCG): A simple algorithm for generating pseudorandom numbers. It works by the formula: X(n+1) = (a * X(n) + c) mod m Where X is the sequence of values, and a, c, and m are constants.
+*Entropy - In the context of cryptography, a measure of the randomness or unpredictability of data. High entropy is crucial for generating secure keys.
+*Baud Rate - The rate at which information is transferred in a communication channel. In the UART context, it refers to the number of signal or symbol changes that occur per second.
+*Nibble - 4 bits, or half of a byte.
+*eXclusive OR (XOR): A logical operation that outputs true only when inputs differ (one is true, the other is false).
 
 
 
